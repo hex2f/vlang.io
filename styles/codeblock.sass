@@ -1,0 +1,68 @@
+.codeblock
+  background: #333344
+  padding: 12px
+  min-width: 500px
+  max-width: calc(100vw - 56px)
+  border-radius: 8px
+  margin: 0px
+  color: #c9c5c4
+  font-size: 15px
+  font-family: "Roboto Mono", "Courier New", Menlo, "DejaVu Sans Mono", Monaco, Courier, monospace
+  position: relative
+
+  .play-btn-fixed
+    position: absolute
+    top: 10px
+    right: 10px
+
+  pre
+    overflow-x: auto
+    overflow-y: hidden
+    line-height: 1.2
+
+  textarea
+    font-size: 15px
+    font-family: "Roboto Mono", "Courier New", Menlo, "DejaVu Sans Mono", Monaco, Courier, monospace
+    line-height: 1.2
+    position: absolute
+    top: 45px
+    left: 11px
+    height: calc(100% - 31px)
+    width: calc(100% - 13px)
+    caret-color: #fff
+    color: transparent
+    background: transparent
+    overflow: hidden
+    border: none
+    resize: none
+    &.no-header
+      top: 25px
+  .titlebar
+    display: flex
+    align-items: center
+    margin-bottom: 6px
+    position: relative
+    top: -2px
+  .play-btn
+    background: transparent
+    border: none
+    margin: 0px;
+    background: #ffffff33
+    color: #ffeeeecf
+    border-radius: 4px
+    padding: 4px 12px
+    cursor: pointer
+    &:hover
+      background: #ffffff55
+      color: #ffeeeedd
+
+  .key
+    color:#5f84ba
+  .string
+    color: #ca763c
+  .number
+    color: #b068e7
+  .separator, .comment
+    color: #9e9795
+  .definition, .type
+    color: #c5ac41

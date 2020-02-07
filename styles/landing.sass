@@ -1,0 +1,108 @@
+.landing
+  display: flex
+  flex-direction: column
+  justify-content: flex-start
+  align-items: center
+  background: linear-gradient(168deg, white 800px, #f6f9fc 800px)
+  
+  .editors
+    display: flex
+    justify-content: space-evenly
+    max-width: calc(100vw - 32px)
+    margin-top: 32px
+    margin-right: 32px
+    flex-wrap: wrap
+    .editor
+      display: flex
+      flex-direction: column
+      align-items: center
+      justify-content: center
+      background: #fff
+      color: #000
+      height: 100px
+      width: 125px
+      border: 1px solid #efefef
+      border-radius: 12px
+      text-decoration: none
+      box-shadow: none
+      cursor: pointer
+      margin-bottom: 16px
+      transition: transform 0.1s, box-shadow 0.1s
+      &:hover
+        transform: translateY(-3px)
+        box-shadow: 0 6px 8px 0px rgba(0, 0, 0, 0.05), 0 16px 32px -2px rgba(0, 0, 0, 0.05)
+      img
+        flex: 0
+        height: 42px
+        margin-bottom: 6px
+  
+  .section
+    display: flex
+    max-width: 1100px
+    width: calc(100vw - 32px)
+    justify-content: space-around
+    margin-top: 32px
+    background: #fff
+    color: #222
+    border-radius: 12px
+    border: 1px solid #efefef
+    h2
+      font-weight: 300
+      margin: 0px
+    .block
+      flex: 1
+      padding: 18px 16px
+      margin: 12px
+      border-radius: 12px
+      td
+        width: 120px
+        line-height: 1.5
+        .sidenote
+          font-size: 75%
+          position: relative
+          top: -5px
+  ul
+    padding-inline-start: 22px
+  i
+    max-width: calc(100vw - 64px)
+    text-align: center
+    font-size: 14px
+        
+
+@media (max-width: 1500px)
+  .landing
+    .hero
+      .examples
+        .codeblock
+          min-width: auto
+
+@media (max-width: 1200px)
+  .landing
+    .hero
+      margin: 32px 0px
+      flex-direction: column
+      .info
+        margin-bottom: 32px
+        text-align: center
+        .button
+          text-align: left
+          &:last-child
+            margin-right: 0px
+        .links, .social
+          margin-right: 0px
+        .social
+          margin-top: 16px
+          i
+            font-size: 28px
+            margin-left: 6px
+            margin-right: 6px
+      .examples
+        margin: 0px 8px 0px 8px !important
+    .editors
+      margin-right: 0px
+
+@media (max-width: 750px)
+  .landing
+    .section
+      flex-direction: column
+      

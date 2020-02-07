@@ -1,0 +1,124 @@
+.landing
+  .hero
+    display: flex
+    justify-content: space-evenly
+    align-items: center
+    width: calc(100% - 32px)
+    max-width: 1200px
+    color: #444
+    margin: 64px 0px
+    .info
+      max-width: 500px
+      h1
+        font-weight: 300
+        margin: 0px 0px 0px -2px
+      p
+        margin: 4px 0px
+
+      .button
+        background: #222
+        color: #fff
+        margin-top: 16px
+        margin-right: 8px
+        padding: 7px 14px 6px 8px
+        border-radius: 6px
+        display: inline-flex
+        align-items: center
+        cursor: pointer
+        position: relative
+        .right-icon
+          width: 18px
+          padding: 12px 2px
+          cursor: pointer
+        .logo
+          height: 32px
+          margin-top: -1px
+          margin-right: 4px
+        .text
+          display: flex
+          flex-direction: column
+          margin-right: 10px
+          .link
+            margin: 0px 4px 0px 8px
+            font-size: 15px
+          .details
+            color: #ddd
+            padding: 0px 4px
+            font-size: 13px
+            line-height: 18px
+            border-radius: 4px
+            margin-left: 5px
+            svg
+              fill: #ddd
+              position: relative
+              top: 2px
+              left: -1px
+        .fast, .changelog
+          position: absolute
+          bottom: -24px
+          left: 0px
+          color: #333
+          text-decoration: none
+        .changelog
+          left: auto
+          right: 0px
+    .examples
+      margin-right: 32px
+      display: flex
+      flex-direction: column
+      align-items: center
+      .codeblock
+      .menu
+        margin-top: 12px
+        display: flex
+        justify-content: center
+        align-items: center
+        
+        button
+          background: transparent
+          border: none
+          cursor: pointer
+          i
+            font-size: 32px !important
+            color: #333
+
+        select
+          font-size: 18px
+        .select
+          margin: 0px 16px
+          width: 200px
+  .social
+    margin-top: 16px
+    padding: 9px 12px
+    border-radius: 6px
+    margin-right: 38px
+    text-align: center
+    p
+      color: #444
+    i
+      font-size: 28px
+      margin: 0px 12px 0px 0px
+      cursor: pointer
+      color: #949fad
+      pointer: cursor
+      &:hover
+        opacity: 0.8
+    .fa-telegram
+      color: #0088cc
+    .fa-youtube
+      color: #ff0000
+    .fa-discord
+      color: #7289da
+    .fa-twitter
+      color: #00acee
+  .links
+    margin-top: 12px
+    margin-right: 38px
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: space-between
+    font-size: 18px
+    a
+      &:hover
+        opacity: 0.9

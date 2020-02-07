@@ -1,0 +1,11 @@
+<div class='examples'>
+  {% set code = "fn main() {\
+	areas := ['game', 'web', 'tools', 'science', 'systems',\
+	          'embedded', 'drivers', 'GUI', 'mobile'] \
+	for area in areas {\
+		println('Hello, $area developers!')\
+	}\
+}" %}
+  {% set filename = "hello_world.v" %}
+  {% include '../components/codeblock.njk' %}
+</div>

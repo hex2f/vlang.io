@@ -1,0 +1,44 @@
+$small-screen-width: 1100px;
+
+body, html
+  height: 100%
+
+body
+  margin: 0px
+  display: flex
+  justify-content: center
+  align-items: center
+  font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+
+.content
+  grid-area: content
+  height: 100%
+  width: 100%
+
+#app
+  display: grid
+  grid-template-columns: 1fr
+  grid-template-rows: 72px 1fr
+  grid-template-areas: "header" "content"
+  height: 100%
+  width: 100%
+
+a
+  color: #4078C0
+  text-decoration: none
+.flex
+  flex: 1
+
+input:focus, button:focus, textarea:focus
+  outline: none
+
+@media (max-width: $small-screen-width)
+  #app
+    grid-template-rows: auto 1fr
+
+@import "./styles/codeblock.sass"
+@import "./styles/documentation.sass"
+@import "./styles/header.sass"
+@import "./styles/hero.sass"
+@import "./styles/landing.sass"
+@import "./styles/playground.sass"

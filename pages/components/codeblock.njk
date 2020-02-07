@@ -1,0 +1,28 @@
+{%- macro random_int(len) -%}
+  {%- for _ in range(len) -%}
+    {{ range(10) | random }}
+  {%- endfor -%}
+{%- endmacro -%}
+
+{% set cbid = "codeblock" + random_int(8) %}
+{% set hlid = "codeblock_hl_" + random_int(8) %}
+{% set taid = "codeblock_ta_" + random_int(8) %}
+
+<div class='codeblock' id="{{cbid}}">
+  {% if noheader %}
+  <button class='play-btn play-btn-fixed'><i class='fas fa-play'></i> Run</button>
+  {% else %}
+  <div class='titlebar separator'>
+    <span>{{filename}}</span>
+    <div class='flex'></div>
+    <button class='play-btn'><i class='fas fa-play'></i> Run</button>
+  </div>
+  {% endif %}
+  <pre><div id="{{hlid}}">{{code}}</div><textarea spellCheck="false" id="{{taid}}" class="{% if noheader %}no-header{% endif %}">{{code}}</textarea></pre>
+</div>
+
+<script>
+const tokenize_{{cbid}} = (e) => document.getElementById("{{hlid}}").innerHTML = Tokenizer(e.target.value).map(token => `<span class='${token.type}'>${token.value}</span>`).join('')
+document.getElementById("{{taid}}").oninput = tokenize_{{cbid}}
+tokenize_{{cbid}}({target:{value: document.getElementById("{{taid}}").value}})
+</script>

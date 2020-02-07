@@ -1,0 +1,43 @@
+$small-screen-width: 1100px;
+  
+.header
+  grid-area: header
+  height: 100%
+  width: 100%
+
+  display: flex
+  align-items: center
+
+  .logo
+    width: 32px
+    margin-bottom: -3px
+    margin-right: 16px
+
+  .patreon img
+    height: 33px
+    margin-top: 4px
+    margin-left: 12px
+
+  .nav
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+    .item
+      color: #777
+      text-decoration: none
+      padding-right: 18px
+      padding-left: 18px
+      font-size: 22px
+      font-weight: 300
+
+@media (max-width: $small-screen-width)
+  .header
+    flex-direction: column
+    .patreon img
+      margin-top: 8px
+      margin-left: 0px
+    .logo
+      width: 42px
+      margin-top: 8px
+      margin-bottom: 12px
+      margin-right: 0px

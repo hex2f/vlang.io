@@ -1,0 +1,281 @@
+<div>
+  <div class="section">
+    <div class="block">
+      <h2>Simple language for building maintainable programs</h2>
+      <p>
+        You can learn the entire language by going through the documentation in half an hour, and in most cases there's only one way to do something.<br/><br/>
+        This results in simple, readable, and maintainable code.<br/><br/>
+        Despite being simple, V gives a lot of power to the developer. Anything you can do in other languages, you can do in V.
+      </p>
+    </div>
+    <div class="block">
+      <h2>Safety</h2>
+      <ul>
+        <li>No null</li>
+        <li>No global variables</li>
+        <li>No undefined values</li>
+        <li>No undefined behavior</li>
+        <li>No variable shadowing</li>
+        <li>Bounds checking</li>
+        <li><a href="">Option/Result types</a></li>
+        <li><a href="">Generics</a></li>
+        <li><a href="">Immutable variables by default</a></li>
+        <li><a href="">Pure functions by default</a></li>
+        <li><a href="">Immutable structs by default</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="block">
+      <h2>Performance</h2>
+      <ul>
+        <li>As fast as C</li>
+        <li>C interop without any costs</li>
+        <li>Minimal amount of allocations</li>
+        <li>Built-in serialization without runtime reflection</li>
+        <li>Compiles to native binaries without any dependencies: a simple web server is only 65 KB</li>
+      </ul>
+    </div>
+    <div class="block">
+      <h2>Fast compilation</h2>
+      <p>
+        V compiles between ≈100k and 1.2 million lines of code per second per CPU core. <i>(Intel i5-7500 @ 3.40GHz, SM0256L SSD, no optimization)</i><br/><br/>
+        V compiles itself in 0.15 - 0.6 seconds.
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="block">
+      <h2>Small and easy to build compiler</h2>
+      <p>
+      The entire language and its standard library are less than 2 MB. V is written in V, and can be built in 0.09 - 1 seconds.
+      <br /><br />
+      For comparison:
+      </p>
+      <table>
+      <tbody><tr><td></td><td>Space required &nbsp;&nbsp;</td><td>Build time</td></tr>
+      <tr><td>Go</td><td>525 MB</td><td>1m 33s</td></tr>
+      <tr><td>Rust</td><td>30 GB</td><td>45m</td></tr>
+      <tr><td>GCC</td><td>8 GB</td><td>50m</td></tr>
+      <tr><td>Clang</td><td>90 GB
+      <a target="_blank" class="sidenote" href="https://lists.llvm.org/pipermail/llvm-dev/2019-April/132028.html">[0]</a>
+      </td><td>25m</td></tr>
+      <tr><td>Swift</td><td>70 GB
+      <a target="_blank" class="sidenote" href="https://github.com/apple/swift#getting-started">[1]</a>
+      </td><td>90m</td></tr>
+      <tr><td>V</td><td>&lt; 2 MB</td><td>0.09s - 1s</td></tr>
+      </tbody></table>
+    </div>
+    <div class="block">
+      <p>Building V in 0.4 seconds and then using the resulting binary to build itself again:</p>
+      <video looping="true" autoPlay muted src="https://vlang.io/img/buildv.mp4" style="width: 80%; margin-left: 10%"></video>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="block">
+      <h2>C translation</h2>
+      <p>V can translate your entire C wip project and offer you the safety, simplicity, and 10-25x compilation speed-up. </p>
+      <div style="display: flex">
+        <pre style="margin-right: 36px">{`std::vector<std::string> s;
+s.push_back("V is ");
+s.push_back("awesome");
+std::cout << s.size();`}</pre>
+
+<pre>{`mut s := []
+s << 'V is '
+s << 'awesome'
+println(s.len)`}</pre>
+      </div>
+      <p>
+        A blog post about translating DOOM will be published soon.<br/><br/>
+        <i>C++ to V translation is at an early stage.</i>
+      </p>
+    </div>
+    <div class="block">
+      <p>Building V in 0.4 seconds and then using the resulting binary to build itself again:</p>
+      <img src="https://vlang.io/img/doom.png" style="width: 80%; margin-left: 10%"></img>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="block">
+      <h2>Hot code reloading</h2>
+      <p>
+        Get your changes instantly without recompiling.
+        <br /><br />
+        Since you also don't have to get to the state you are working on after every compilation, this can save a lot of precious minutes of your development time.
+      </p>
+      <a href="https://github.com/vlang/v/tree/master/examples/hot_reload">github.com/.../examples/hot_reload</a>
+    </div>
+    <div class="block">
+      <video looping="true" autoPlay muted src="hot.mp4" style="width: 80%; margin-left: 10%"></video>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="block">
+      <h2>Powerful graphics libraries</h2>
+      <p>
+        Cross-platform drawing library built on top of GDI+/Cocoa Drawing, and an OpenGL based graphics library for more complex 2D/3D applications, that will also have the following features:
+      </p>
+      <ul>
+        <li>Loading complex 3D objects with textures</li>
+        <li>Camera (moving, looking around)</li>
+        <li>Skeletal animation</li>
+      </ul>
+      <p>DirectX, Vulkan, and Metal support is planned.</p>
+      <p>A simple example of the graphics library in action is <a href="https://github.com/vlang/v/blob/master/examples/tetris">tetris.v</a>.</p>
+    </div>
+    <div class="block">
+      <img src="https://vlang.io/img/gg.png" style="width: 60%; margin-left: 20%"></img>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="block">
+      <h2>Native cross-platform GUI library</h2>
+      <p>
+        Build native apps with native controls. You no longer need to embed a browser to develop cross-platform apps quickly.<br /><br />
+        V has a ui module that uses native GUI toolkits: WinAPI/GDI+ on Windows, Cocoa on macOS. On Linux custom drawing is used.<br /><br />
+        Coming soon:
+      </p>
+      <ul>
+        <li>a Delphi-like visual editor for building native GUI apps</li>
+        <li>iOS/Android support with native controls</li>
+        <li>a declarative API similar to SwiftUI and React Native</li>
+      </ul>
+      <p><a href="https://github.com/vlang/ui">github.com/vlang/ui</a></p>
+    </div>
+    <div class="block">
+      <p>
+        Volt, a 300 KB Slack client built with V and V ui: 
+      </p>
+      <img src="https://volt-app.com/img/screen3.png" style="width: 100%"></img>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="block">
+      <h2>Easy cross compilation</h2>
+      <p>
+        To cross compile your software simply run v -os windows. or v -os linux. No extra steps required, even for GUI and graphical apps!<br/><br/>
+        (Compiling macOS software only works on macOS for now.)
+      </p>
+      <ul>
+        <li>a Delphi-like visual editor for building native GUI apps</li>
+        <li>iOS/Android support with native controls</li>
+        <li>a declarative API similar to SwiftUI and React Native</li>
+      </ul>
+      <p><a href="https://github.com/vlang/ui">github.com/vlang/ui</a></p>
+    </div>
+    <div class="block">
+      <p>
+        Building V for Windows using V for macOS, and then testing resulting v.exe on a Windows VM:
+      </p>
+      <video looping="true" autoPlay muted src="https://vlang.io/img/vwin.mp4" style="width: 100%"></img>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="block">
+      <h2>Painless deployments and dependency management</h2>
+      <p>
+        To build you project, no matter how big, all you need to do is run v .<br/><br/>
+        No more build environments, makefiles, headers, virtual environments, etc.<br/><br/>
+        You get a single statically linked binary that is guaranteed to work on all operating systems (provided you cross compile) without any dependencies.<br/><br/>
+        Installing new libraries is as simple as v install sqlite.
+      </p>
+      <ul>
+        <li>a Delphi-like visual editor for building native GUI apps</li>
+        <li>iOS/Android support with native controls</li>
+        <li>a declarative API similar to SwiftUI and React Native</li>
+      </ul>
+    </div>
+    <div class="block">
+      <h2>Run everywhere</h2>
+      <p>
+        V can emit (human readable) C, so you get the great platform support and optimization of GCC and Clang.<br/><br/>
+        Emitting C will always be an option, even after direct machine code generation matures.<br/><br/>
+        V can call C code, and calling V code is possible in any language that has C interop.
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="block">
+      <h2>REPL</h2>
+      <pre style="margin-right: 36px">{`v
+>>> import http 
+>>> data := http.get('https://vlang.io/utc_now') 
+or { panic(err) }
+>>> data.text
+1565977541`}</pre>
+    </div>
+    <div class="block">
+      <h2>V Script</h2>
+      <pre style="margin-right: 36px">{`for file in ls('build/') {
+rm(file) 
+}  
+mv('v.exe', 'build/') 
+
+v run deploy.vsh `}</pre>
+      <p><a href="https://vlang.io/docs#bash">Read more about V script</a></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="block">
+      <h2>Powerful built-in web framework</h2>
+      <p><a href="https://github.com/vlang/v/tree/master/vlib/vweb">github.com/vlang/v/tree/master/vlib/vweb</a></p>
+      {% set code = "['/post/:id']\
+fn (b Blog) show_post(id int) vweb.Result {\
+  post := b.posts_repo.retrieve(id) or {\
+    return vweb.not_found()\
+  }\
+  return vweb.view(post)\
+}" %}
+      {% set filename = "vweb.v" %}
+      {% include '../components/codeblock.njk' %}
+      <p><a href="https://forum.vlang.io/">V forum</a> is running on Vorum (built with V/vweb).</p>
+    </div>
+  </div>
+
+  {% set code = "struct Customer {\
+  id int\
+  name string\
+  nr_orders int\
+  country string\
+}\
+\
+db := pg.connect(db_name, db_user)\
+\
+nr_customers := db.select count from Customer\
+println('number of all customers: $nr_customers')\
+\
+// V syntax can be used to build queries\
+uk_customers = db.select from Customer where country == 'uk' && nr_orders > 0\
+for customer in uk_customers {\
+  println('$customer.id - $customer.name')\
+}\
+\
+// by adding \`limit 1\` we tell V that there will be\
+// only one object\
+customer = db.select from Customer where id == 1 limit 1\
+println(customer.name)\
+\
+// insert a new customer\
+new_customer := Customer{name: 'Bob', nr_orders: 10}\
+db.insert(new_customer)" %}
+  <div class="section">
+    <div class="block">
+      <h2>Built-in ORM</h2>
+      <p>
+        {% set filename = "orm.v" %}
+        {% include '../components/codeblock.njk' %}
+      </p>
+    </div>
+  </div>
+</div>
