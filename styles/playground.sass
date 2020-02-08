@@ -1,6 +1,12 @@
 .playground
   display: flex
-  .codeblock, .output
+  flex-direction: column
+  .editor
+    display: flex
     flex: 1
-    margin: 6px
-  
+    .codeblock, .output
+      flex: 1
+      margin: 6px
+  .select
+    margin-left: 8px
+    width: 220px

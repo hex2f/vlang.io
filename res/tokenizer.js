@@ -91,7 +91,7 @@ function Tokenizer (code) {
       }
     }
 
-    if ((code[i] === '\'' || code[i] === '\"') && code[i - 1] !== "\\") {
+    if ((code[i] === '\'' || code[i] === '\"') && code[i - 1] !== "\\" && !readingComment) {
       if (code[i] === stringStarter && readingString) {
         peek(tokens).pushValue(code[i])
         if (readingString) { finishType(tokens, 'string') }
