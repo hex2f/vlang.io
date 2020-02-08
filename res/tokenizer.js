@@ -1,6 +1,35 @@
 //                      WARNING!!!                        //
 // Very bad parser, i'm not a big brain low level girl :( //
-//                                                        //
+// - Leah                                                 //
+
+const keywords = [
+  "break",
+  "const",
+  "continue",
+  "defer",
+  "else",
+  "enum",
+  "fn",
+  "for",
+  "go",
+  "goto",
+  "if",
+  "import",
+  "in",
+  "interface",
+  "match",
+  "module",
+  "mut",
+  "none",
+  "or",
+  "pub",
+  "struct",
+  "type"
+]
+const ops = ["+","-","*","/","%","&","|","^","<<",">>"]
+const assignments = ["+=","-=", "*=","/=","%=","&=","|=","^=",">>=","<<=",":=","="]
+const breakers = ["(",")", "{","}"]
+const types = ["bool","string","i8","i16","int","i64","i128","byte","u16","u32","u64","u128","rune","f32","f64","byteptr","voidptr"]
 
 function peek (tokens, steps = 1) {
   const token = tokens[tokens.length - steps]
@@ -12,69 +41,72 @@ function peek (tokens, steps = 1) {
   return { type: '', value: '', ...token }
 }
 
+function finishType (tokens, type) {
+  peek(tokens).setType(type)
+  tokens.push({ type: 'unknown', value: '' })
+}
+
 function Tokenizer (code) {
   let i = 0
   let readingString = false
+  let stringStarter = ""
   let readingComment = false
+  let readingMultiLineComment = false
   const tokens = [{ type: 'unknown', value: '' }]
 
+  function IsKeyword (next, str) { return keywords.indexOf(str) > -1 && !readingString && !readingComment && next === ' ' }
+  function IsType (next, str) { return types.indexOf(str) > -1 && !readingString && !readingComment && (next === ' ' || next === '\n' || IsBreak(next)) }
+  function IsAssignment (str) { return assignments.indexOf(str) > -1 && !readingString && !readingComment }
+  function IsOp (str) { return ops.indexOf(str) > -1 && !readingString && !readingComment }
+  function IsBreak (str) { return breakers.indexOf(str) > -1 && !readingString && !readingComment}
+  function IsNumber (str) { return str.match(/^[0-9]+$/) && !readingString && !readingComment}
+
   while (i < code.length) {
-    if (readingComment && code[i - 1] !== '\n') {
-      peek(tokens).pushValue(code[i])
-      i++
-      continue
-    } else if (readingComment) {
-      readingComment = false
-      tokens.push({ type: 'unknown', value: '' })
-    }
-    if (((code[i] === ' ' && code[i - 1] !== ' ') || code[i] === '(' || code[i] === ')' || code[i] === ',' || code[i] === '\n' || code[i].match(/[0-9]/)) && !readingString) {
-      const lastToken = peek(tokens).value
-      if (['for', 'import', 'if', 'return', 'else', 'in', 'fn', 'struct', 'interface'].indexOf(lastToken.replace(/\n/g, '')) > -1) {
-        peek(tokens).setType('key')
-      } else if ((peek(tokens, 2).type === 'key' || (peek(tokens, 2).type === 'whitespace' && peek(tokens, 3).type === 'key')) && (lastToken.endsWith('(') || lastToken.endsWith(')'))) {
-        peek(tokens).setType('function')
-      } else if (lastToken === '=' || lastToken === ':=') {
-        peek(tokens).setType('definition')
-      } else if (code[i].match(/[0-9]/)) {
-        if (peek(tokens).type === 'number') {
-          peek(tokens).pushValue(code[i])
-        } else {
-          tokens.push({ type: 'number', value: code[i] })
-        }
-      } else if (['int', 'f64', 'mut'].indexOf(lastToken) > -1) {
-        peek(tokens).setType('type')
-      }
-      if (code[i] === '\n') {
-        tokens.push({ type: 'whitespace', value: '\n' })
-      }
-      if (!lastToken.match(/[0-9]/)) {
-        if (code[i] === ' ') {
-          tokens.push({ type: 'whitespace', value: ' ' })
-        }
-        if (code[i + 1] !== ' ') {
-          if (code[i] === ',' || code[i] === '(' || code[i] === ')') {
-            tokens.push({ type: 'separator', value: code[i] })
-          }
-          tokens.push({ type: 'unknown', value: '' })
-        } else if (code[i + 1] === ' ' && (code[i] === ',' || code[i] === '(' || code[i] === ')')) {
-          tokens.push({ type: 'separator', value: code[i] })
-        }
-      }
-    } else if (!readingString && code[i] === ' ' && code[i - 1] === ' ') {
-      peek(tokens).pushValue(' ')
-      if (code[i + 1] !== ' ') tokens.push({ type: 'unknown', value: '' })
-    } else if ((code[i] === '"' || code[i] === "'") && code[i - 1] !== '\\') {
-      readingString = !readingString
-      peek(tokens).setType('string').pushValue(code[i])
-      !readingString && tokens.push({ type: 'unknown', value: '' })
-    } else if (code[i] === '/' && code[i - 1] === '/') {
+    if (code[i] === '/' && (code[i+1] === '/' || code[i+1] === '*') && code[i-1] !== '\\') {
       readingComment = true
-      peek(tokens).setValue(peek(tokens).value.slice(0, -1))
-      tokens.push({ type: 'comment', value: '//' })
+      if (code[i+1] === '*') readingMultiLineComment = true
+    } else
+    if (code[i] === '*' && code[i+1] === '/' && code[i-1] !== '\\') {
+      readingComment = false
+      readingMultiLineComment = false
+      finishType(tokens, 'comment')
+    } else
+    if (IsKeyword(code[i], peek(tokens).value)) { finishType(tokens, 'keyword') } else
+    if (IsType(code[i], peek(tokens).value)) { finishType(tokens, 'type') } else
+    if (IsAssignment(peek(tokens).value)) { finishType(tokens, 'definition') } else
+    if (IsOp(peek(tokens).value)) { finishType(tokens, 'operator') } else
+    if (IsBreak(peek(tokens).value)) { finishType(tokens, 'separator') } else
+    if (IsNumber(peek(tokens).value)) { finishType(tokens, 'number') } else
+    if (peek(tokens).value === 'return' && !readingString && !readingComment && code[i] === ' ') { finishType(tokens, 'return') }
+
+    if (peek(tokens).value === ' ' || peek(tokens).value === '\n') { finishType(tokens, 'whitespace') } else
+    if (IsBreak(code[i])) {
+      if (peek(tokens, 3).type === 'keyword') { finishType(tokens, 'key') } else { finishType(tokens, 'unknown') }
+    } else if ((code[i] === ' ' && !readingString) || (code[i] === '\n' && !readingString && code[i-1] !== '\\')) {
+      if(code[i] === '\n' && readingComment && !readingMultiLineComment) { 
+        finishType(tokens, 'comment')
+        readingComment = false
+      } else if (!readingComment) {
+        finishType(tokens, 'unknown')
+      }
+    }
+
+    if ((code[i] === '\'' || code[i] === '\"') && code[i - 1] !== "\\") {
+      if (code[i] === stringStarter && readingString) {
+        peek(tokens).pushValue(code[i])
+        if (readingString) { finishType(tokens, 'string') }
+        readingString = false
+      } else if(!readingString) {
+        finishType(tokens, 'unknown')
+        peek(tokens).pushValue(code[i])
+        stringStarter = code[i]
+        readingString = true
+      } else {
+        peek(tokens).pushValue(code[i])
+      }
     } else {
       peek(tokens).pushValue(code[i])
     }
-
     i++
   }
 

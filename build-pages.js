@@ -10,7 +10,8 @@ const renderSass = promisify(sass.render)
 const ncp = promisify(NCP.ncp)
 
 const pages = [
-  'index'
+  'index',
+  'play'
 ]
 
 async function compile() {
