@@ -11,12 +11,12 @@
 
 <div class='codeblock' id="{{cbid}}">
   {% if noheader %}
-  <button class='play-btn play-btn-fixed' id='{{rbid}}'><i class='fas fa-play'></i> Run</button>
+  <a href="/play" class='play-btn play-btn-fixed' id='{{rbid}}'><i class='fas fa-play'></i> Run</a>
   {% else %}
   <div class='titlebar separator'>
     <span>{{filename}}</span>
     <div class='flex'></div>
-    <button class='play-btn' id='{{rbid}}'><i class='fas fa-play'></i> Run</button>
+    <a href="/play" class='play-btn' id='{{rbid}}'><i class='fas fa-play'></i> Run</a>
   </div>
   {% endif %}
   <pre><div id="{{hlid}}">{{code}}</div><textarea spellCheck="false" id="{{taid}}" class="{% if noheader %}no-header{% endif %}">{{code}}</textarea></pre>
@@ -30,14 +30,20 @@ function {{setter}}(value) {
 }
 {% endif %}
 function tokenize_{{cbid}} (e) {
-  document.getElementById("{{hlid}}").innerHTML = Tokenizer(e.target.value)
-    .map(function(token) { return `<span class='${token.type}'>${token.value}</span>` })
-    .join('')
+  Tokenizer(e.target.value).then(function(tokens) {
+    document.getElementById("{{hlid}}").innerHTML = tokens
+      .map(function(token) { return `<span class='${token.type}'>${token.value}</span>` })
+      .join('')
+  })
+    
 }
 document.getElementById("{{taid}}").oninput = tokenize_{{cbid}}
 tokenize_{{cbid}}({target:{value: document.getElementById("{{taid}}").value}})
-
+document.getElementById("{{rbid}}").onauxclick = function(e) {
+  localStorage.setItem('sandbox-code', document.getElementById("{{taid}}").value)
+}
 document.getElementById("{{rbid}}").onclick = function(e) {
+  if (location.pathname === '/play') e.preventDefault()
   var codeblock_value = document.getElementById("{{taid}}").value
   localStorage.setItem('sandbox-code', codeblock_value)
   {% if output_to.length > 0 %}
@@ -53,8 +59,6 @@ document.getElementById("{{rbid}}").onclick = function(e) {
     .then(function(res) {
       document.getElementById("{{output_to}}").innerText = res.lastIndexOf('==vmft:') > 0 ? res.substr(0, res.lastIndexOf('==vmft:')) : res
     })
-  {% else %}
-  location.href = '/play'
   {% endif %}
 }
 

@@ -1,0 +1,710 @@
+<h1 id="v-documentation"><a class="markdownIt-Anchor" href="#v-documentation">#</a> V Documentation</h1>
+<h2 id="introduction"><a class="markdownIt-Anchor" href="#introduction">#</a> Introduction</h2>
+<p>V is a statically typed compiled programming language designed for building maintainable software.</p>
+<p>It's similar to Go and is also influenced by Oberon, Rust, Swift.</p>
+<p>V is a very simple language. Going through this documentation will take you about half an hour,
+and by the end of it you will learn pretty much the entire language.</p>
+<p>Despite being simple, it gives a lot of power to the developer. Anything you can do in other languages,
+you can do in V.</p>
+<h2 id="hello-world"><a class="markdownIt-Anchor" href="#hello-world">#</a> Hello World</h2>
+{% set code = "fn main() {\n    println('hello world')\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Functions are declared with <code>fn</code>. Return type goes after the function
+name. In this case <code>main</code> doesn't return anything, so the type is
+omitted.</p>
+<p>Just like in C and all related languages, <code>main</code> is an entry point.</p>
+<p><code>println</code> is one of the few built-in functions. It prints the value
+to standard output.</p>
+<p><code>fn main()</code> declaration can be skipped in one file programs.
+This is useful when writing small programs, &quot;scripts&quot;, or just learning
+the language. For brevity, <code>fn main()</code> will be skipped in this
+tutorial.</p>
+<p>This means that a &quot;hello world&quot; program can be as simple as</p>
+{% set code = "println('hello world')" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="comments"><a class="markdownIt-Anchor" href="#comments">#</a> Comments</h2>
+{% set code = "// This is a single line comment.\n\n/* This is a multiline comment.\n   /* It can be nested. */\n*/" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="functions"><a class="markdownIt-Anchor" href="#functions">#</a> Functions</h2>
+{% set code = "fn main() {\n    println(add(77, 33))\n    println(sub(100, 50))\n}\n\nfn add(x int, y int) int {\n    return x + y\n}\n\nfn sub(x, y int) int {\n    return x - y\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Again, the type comes after the argument's name.</p>
+<p>Just like in Go and C, functions cannot be overloaded.
+This simplifies the code and improves maintainability and readability.</p>
+<p>Functions can be used before their declaration:
+<code>add</code> and <code>sub</code> are declared after <code>main</code>, but can still be called from <code>main</code>.
+This is true for all declarations in V and eliminates the need of header files
+or thinking about the order of files and declarations.</p>
+{% set code = "fn foo() (int, int) {\n    return 2, 3\n}\n\na, b := foo()\nprintln(a) // 2\nprintln(b) // 3" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Functions can return multiple values.
+Functions, like consts, and types, are private (not exported) by default.
+To allow other modules to use them, prepend <code>pub</code>. The same applies
+to consts and types.</p>
+{% set code = "pub fn public_function() {\n}\n\nfn private_function() {\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="variables"><a class="markdownIt-Anchor" href="#variables">#</a> Variables</h2>
+{% set code = "name := 'Bob'\nage := 20\nlarge_number := i64(9999999999)\nprintln(name)\nprintln(age)\nprintln(large_number)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Variables are declared and initialized with <code>:=</code>. This is the only
+way to declare variables in V. This means that variables always have an initial
+value.</p>
+<p>The variable's type is inferred from the value on the right hand side.
+To force a different type, use type conversion:
+the expression <code>T(v)</code> converts the value <code>v</code> to the
+type <code>T</code>.</p>
+<p>Unlike most other languages, V only allows defining variables in functions.
+Global (module level) variables are not allowed. There's no global state in V.</p>
+{% set code = "mut age := 20\nprintln(age)\nage = 21\nprintln(age)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>To change the value of the variable use <code>=</code>. In V, variables are
+immutable by default. To be able to change the value of the variable, you have to declare it with <code>mut</code>.</p>
+<p>Try compiling the program above after removing <code>mut</code> from the first line.</p>
+<p>Please note the difference between <code>:=</code> and <code>=</code><br>
+<code>:=</code> is used for declaring and initializing, <code>=</code> is used for assigning.</p>
+{% set code = "fn main() {\n    age = 21\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>This code will not compile, because variable <code>age</code> is not declared.
+All variables need to be declared in V.</p>
+{% set code = "fn main() {\n    age := 21\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>In development mode this code will result in an &quot;unused variable&quot; warning.
+In production mode (<code>v -prod foo.v</code>) it will not compile at all, like in Go.</p>
+{% set code = "fn main() {\n    a := 10\n    if true {\n        a := 20\n    }\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Unlike most languages, variable shadowing is not allowed. Declaring a variable with a name that is already used in a parent scope will result in a compilation error.</p>
+<h2 id="basic-types"><a class="markdownIt-Anchor" href="#basic-types">#</a> Basic types</h2>
+{% set code = "bool\n\nstring\n\ni8    i16  int  i64      i128 (soon)\nbyte  u16  u32  u64      u128 (soon)\n\nrune // represents a Unicode code point\n\nf32 f64\n\nbyteptr\nvoidptr" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Please note that unlike C and Go, <code>int</code> is always a 32 bit integer.</p>
+<h2 id="strings"><a class="markdownIt-Anchor" href="#strings">#</a> Strings</h2>
+{% set code = "name := 'Bob'\nprintln('Hello, $name!')  // `$` is used for string interpolation\nprintln(name.len)\n\nbobby := name + 'by' // + is used to concatenate strings\nprintln(bobby) // \"Bobby\"\n\nprintln(bobby[1..3]) // \"ob\"\nmut s := 'hello '\ns += 'world' // `+=` is used to append to a string\nprintln(s) // \"hello world\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>In V, a string is a read-only array of bytes. String data is encoded using UTF-8.</p>
+<p>Strings are immutable.</p>
+<p>Both single and double quotes can be used to denote strings. For consistency,
+<code>vfmt</code> converts double quotes to single quotes unless the string contains a single quote character.</p>
+<p>Interpolation syntax is pretty simple. It also works with fields:
+<code>'age = $user.age'</code>. If you need more complex expressions, use <code>${}</code>: <code>'can register = ${user.age &gt; 13}'</code>.</p>
+<p>All operators in V must have values of the same type on both sides. This code will not compile if <code>age</code> is an <code>int</code>:</p>
+{% set code = "println('age = ' + age)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>We have to either convert <code>age</code> to a <code>string</code>:</p>
+{% set code = "println('age = ' + age.str())" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>or use string interpolation (preferred):</p>
+{% set code = "println('age = $age')" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>To denote character literals, use `</p>
+{% set code = "a := `a`\nassert 'aloha!'[0] == `a`" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>For raw strings, prepend <code>r</code>. Raw strings are not escaped:</p>
+{% set code = "s := r'hello\nworld'\nprintln(s) // \"hello\nworld\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="arrays"><a class="markdownIt-Anchor" href="#arrays">#</a> Arrays</h2>
+{% set code = "mut nums := [1, 2, 3]\nprintln(nums) // \"[1, 2, 3]\"\nprintln(nums[1]) // \"2\"\n\nnums << 4\nprintln(nums) // \"[1, 2, 3, 4]\"\n\nnums << [5, 6, 7]\nprintln(nums) // \"[1, 2, 3, 4, 5, 6, 7]\"\n\nmut names := ['John']\nnames << 'Peter'\nnames << 'Sam'\n// names << 10  <-- This will not compile. `names` is an array of strings.\nprintln(names.len) // \"3\"\nprintln('Alex' in names) // \"false\"\n\nnames = [] // The array is now empty\n\n// We can also preallocate a certain amount of elements.\nids := [0].repeat(50) // This creates an array with 50 zeros" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Array type is determined by the first element: <code>[1, 2, 3]</code> is an array of ints (<code>[]int</code>).</p>
+<p><code>['a', 'b']</code> is an array of strings (<code>[]string</code>).</p>
+<p>All elements must have the same type. <code>[1, 'a']</code> will not compile.</p>
+<p><code>&lt;&lt;</code> is an operator that appends a value to the end of the array.
+It can also append an entire array.</p>
+<p><code>.len</code> field returns the length of the array. Note, that it's a read-only field,
+and it can't be modified by the user. All exported fields are read-only by default in V.</p>
+<p><code>val in array</code> returns true if the array contains <code>val</code>.</p>
+<p>All arrays can be easily printed with <code>println(arr)</code> and converted to a string
+with <code>s := arr.str()</code>.</p>
+<p>Arrays can be efficiently filtered and mapped with <code>.filter()</code> and
+<code>.map()</code> methods:</p>
+{% set code = "nums := [1, 2, 3, 4, 5, 6]\neven := nums.filter(it % 2 == 0)\nprintln(even) // [2, 4, 6]\n\nwords := ['hello', 'world']\nupper := words.map(it.to_upper())\nprintln(upper) // ['HELLO', 'WORLD']" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p><code>it</code> is a special variable that refers to an element in filter/map methods.</p>
+<h2 id="maps"><a class="markdownIt-Anchor" href="#maps">#</a> Maps</h2>
+{% set code = "mut m := map[string]int // Only maps with string keys are allowed for now\nm['one'] = 1\nm['two'] = 2\nprintln(m['one']) // \"1\"\nprintln(m['bad_key']) // \"0\"\nprintln('bad_key' in m) // Use `in` to detect whether such key exists\nm.delete('two')\n\nnumbers := {\n    'one': 1,\n    'two': 2\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="if"><a class="markdownIt-Anchor" href="#if">#</a> If</h2>
+{% set code = "a := 10\nb := 20\nif a < b {\n    println('$a < $b')\n} else if a > b {\n    println('$a > $b')\n} else {\n    println('$a == $b')\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p><code>if</code> statements are pretty straightforward and similar to most other languages.
+Unlike other C-like languages, there are no parentheses surrounding the condition, and the braces are always required.</p>
+<p><code>if</code> can be used as an expression:</p>
+{% set code = "num := 777\ns := if num % 2 == 0 {\n    'even'\n}\nelse {\n    'odd'\n}\nprintln(s) // \"odd\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="in-operator"><a class="markdownIt-Anchor" href="#in-operator">#</a> In operator</h2>
+<p><code>in</code> allows to check whether an array or a map contains an element.</p>
+{% set code = "nums := [1, 2, 3]\nprintln(1 in nums) // true\n\nm := {'one': 1, 'two': 2}\nprintln('one' in m) // true" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>It's also useful for writing more clear and compact boolean expressions:</p>
+{% set code = "if parser.token == .plus || parser.token == .minus ||\n    parser.token == .div || parser.token == .mult {\n    ...\n}\n\nif parser.token in [.plus, .minus, .div, .mult] {\n    ...\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>V optimizes such expressions, so both <code>if</code> statements above produce the same machine code, no arrays are created.</p>
+<h2 id="for-loop"><a class="markdownIt-Anchor" href="#for-loop">#</a> For loop</h2>
+<p>V has only one looping construct: <code>for</code>.</p>
+{% set code = "numbers := [1, 2, 3, 4, 5]\nfor num in numbers {\n    println(num)\n}\nnames := ['Sam', 'Peter']\nfor i, name in names {\n    println('$i) $name')  // Output: 0) Sam\n}                             //         1) Peter" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>The <code>for value in</code> loop is used for going through elements of an array.
+If an index is required, an alternative form <code>for index, value in</code> can be used.</p>
+<p>Note, that the value is read-only. If you need to modify the array while looping, you have to use indexing:</p>
+{% set code = "mut numbers := [1, 2, 3, 4, 5]\nfor i, num in numbers {\n    println(num)\n    numbers[i] = 0\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+{% set code = "mut sum := 0\nmut i := 0\nfor i <= 100 {\n    sum += i\n    i++\n}\nprintln(sum) // \"5050\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>This form of the loop is similar to <code>while</code> loops in other languages.</p>
+<p>The loop will stop iterating once the boolean condition evaluates to false.</p>
+<p>Again, there are no parentheses surrounding the condition, and the braces are always required.</p>
+{% set code = "mut num := 0\nfor {\n    num++\n    if num >= 10 {\n        break\n    }\n}\nprintln(num) // \"10\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>The condition can be omitted, this results in an infinite loop.</p>
+{% set code = "for i := 0; i < 10; i++ {\n    // Don't print 6\n    if i == 6 {\n        continue\n    }\n    println(i)\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Finally, there's the traditional C style <code>for</code> loop. It's safer than the <code>while</code> form
+because with the latter it's easy to forget to update the counter and get
+stuck in an infinite loop.</p>
+<p>Here <code>i</code> doesn't need to be declared with <code>mut</code> since it's always going to be mutable by definition.</p>
+<h2 id="match"><a class="markdownIt-Anchor" href="#match">#</a> Match</h2>
+{% set code = "os := 'windows'\nprint('V is running on ')\nmatch os {\n    'darwin' { println('macOS.') }\n    'linux'  { println('Linux.') }\n    else     { println(os) }\n}\n\nnumber := 2\ns := match number {\n    1    { 'one' }\n    2    { 'two' }\n    else { 'many'}\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>A match statement is a shorter way to write a sequence of <code>if - else</code> statements.
+When a matching branch is found, the following statement block will be run, and the final expression will be returned.
+The else branch will be evaluated when no other branches match.</p>
+{% set code = "enum Color {\n    red\n    blue\n    green\n}\n\nfn is_red_or_blue(c Color) bool {\n    return match c {\n        .red  { true  }\n        .blue { true  }\n        else  { false }\n    }\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>A match statement can also be used to branch on the variants of an <code>enum</code>
+by using the shorthand <code>.variant_here</code> syntax.</p>
+<h2 id="structs"><a class="markdownIt-Anchor" href="#structs">#</a> Structs</h2>
+{% set code = "struct Point {\n    x int\n    y int\n}\n\np := Point{\n    x: 10\n    y: 20\n}\n\nprintln(p.x) // Struct fields are accessed using a dot" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Structs are allocated on the stack. To allocate a struct on the heap
+and get a reference to it, use the <code>&amp;</code> prefix:</p>
+{% set code = " // Alternative initialization syntax for structs with 3 fields or fewer\np := &Point{10, 10}\n// References have the same syntax for accessing fields\nprintln(p.x)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>The type of <code>p</code> is <code>&amp;Point</code>. It's a reference to <code>Point</code>.
+References are similar to Go pointers and C++ references.</p>
+<p>V doesn't have subclassing, but it supports embedded structs:</p>
+{% set code = "// TODO: this will be implemented later\nstruct Button {\n    Widget\n    title string\n}\n\nbutton := new_button('Click me')\nbutton.set_pos(x, y)\n\n// Without embedding we'd have to do\nbutton.widget.set_pos(x,y)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="access-modifiers"><a class="markdownIt-Anchor" href="#access-modifiers">#</a> Access modifiers</h2>
+<p>Struct fields are private and immutable by default (making structs immutable as well).
+Their access modifiers can be changed with
+<code>pub</code> and <code>mut</code>. In total, there are 5 possible options:</p>
+{% set code = "struct Foo {\n    a int   // private immutable (default)\nmut:\n    b int   // private mutable\n    c int   // (you can list multiple fields with the same access modifier)\npub:\n    d int   // public immmutable (readonly)\npub mut:\n    e int   // public, but mutable only in parent module\n__global:\n    f int   // public and mutable both inside and outside parent module\n}           // (not recommended to use, that's why the 'global' keyword\n            // starts with __)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>For example, here's the <code>string</code> type defined in the <code>builtin</code> module:</p>
+{% set code = "struct string {\n    str byteptr\npub:\n    len int\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>It's easy to see from this definition that <code>string</code> is an immutable type.
+The byte pointer with the string data is not accessible outside <code>builtin</code> at all.
+<code>len</code> field is public, but not mutable:</p>
+{% set code = "fn main() {\n    str := 'hello'\n    len := str.len // OK\n    str.len++      // Compilation error\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="methods"><a class="markdownIt-Anchor" href="#methods">#</a> Methods</h2>
+{% set code = "struct User {\n    age int\n}\n\nfn (u User) can_register() bool {\n    return u.age > 16\n}\n\nuser := User{age: 10}\nprintln(user.can_register()) // \"false\"\n\nuser2 := User{age: 20}\nprintln(user2.can_register()) // \"true\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>V doesn't have classes. But you can define methods on types.</p>
+<p>A method is a function with a special receiver argument.</p>
+<p>The receiver appears in its own argument list between the <code>fn</code> keyword and the method name.</p>
+<p>In this example, the <code>can_register</code> method has a receiver of type <code>User</code> named <code>u</code>.
+The convention is not to use receiver names like <code>self</code> or <code>this</code>,
+but a short, preferably one letter long, name.</p>
+<h2 id="pure-functions-by-default"><a class="markdownIt-Anchor" href="#pure-functions-by-default">#</a> Pure functions by default</h2>
+<p>V functions are pure by default, meaning that their return values are only determined by their arguments,
+and their evaluation has no side effects.</p>
+<p>This is achieved by lack of global variables and all function arguments being immutable by default,
+even when references are passed.</p>
+<p>V is not a pure functional language however.
+It is possible to modify function arguments by using the same keyword <code>mut</code>:</p>
+{% set code = "struct User {\nmut:\n    is_registered bool\n}\n\nfn (u mut User) register() {\n    u.is_registered = true\n}\n\nmut user := User{}\nprintln(user.is_registered) // \"false\"\nuser.register()\nprintln(user.is_registered) // \"true\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>In this example, the receiver (which is simply the first argument) is marked as mutable,
+so <code>register()</code> can change the user object. The same works with non-receiver arguments:</p>
+{% set code = "fn multiply_by_2(arr mut []int) {\n    for i := 0; i < arr.len; i++ {\n        arr[i] *= 2\n    }\n}\n\nmut nums := [1, 2, 3]\nmultiply_by_2(mut nums)\nprintln(nums) // \"[2, 4, 6]\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Note, that you have to add <code>mut</code> before <code>nums</code> when calling this function. This makes
+it clear that the function being called will modify the value.</p>
+<p>It is preferable to return values instead of modifying arguments.
+Modifying arguments should only be done in performance-critical parts of your application
+to reduce allocations and copying.</p>
+<p>For this reason V doesn't allow to modify primitive args like integers, only
+complex types like arrays and maps.</p>
+<p>Use <code>user.register()</code> or <code>user = register(user)</code>
+instead of <code>register(mut user)</code>.</p>
+<p>V makes it easy to return a modified version of an object:</p>
+{% set code = "fn register(u User) User {\n    return { u | is_registered: true }\n}\n\nuser = register(user)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="high-order-functions"><a class="markdownIt-Anchor" href="#high-order-functions">#</a> High order functions</h2>
+{% set code = "fn sqr(n int) int {\n    return n * n\n}\n\nfn run(value int, op fn(int) int) int {\n    return op(value)\n}\n\nfn main()  {\n    println(run(5, sqr)) // \"25\"\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="references"><a class="markdownIt-Anchor" href="#references">#</a> References</h2>
+{% set code = "fn (foo Foo) bar_method() {\n    ...\n}\n\nfn bar_function(foo Foo) {\n    ...\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>If a function argument is immutable like <code>foo</code> in the examples above,
+V can pass it by value or by reference. The decision is made
+by the compiler, and the developer doesn't need to think about it.</p>
+<p>You no longer need to remember whether you should pass the struct by value
+or by reference.</p>
+<p>There's a way to ensure that the struct is always passed by reference by
+adding <code>&amp;</code>:</p>
+{% set code = "fn (foo &Foo) bar() {\n    println(foo.abc)\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p><code>foo</code> is still immutable and can't be changed. For that,
+<code>(foo mut Foo)</code> has to be used.</p>
+<p>In general, V references are similar to Go pointers and C++ references.
+For example, a tree structure definition would look like this:</p>
+{% set code = "struct Node<T> {\n    val   T\n    left  &Node\n    right &Node\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="constants"><a class="markdownIt-Anchor" href="#constants">#</a> Constants</h2>
+{% set code = "const (\n    pi    = 3.14\n    world = '世界'\n)\n\nprintln(pi)\nprintln(world)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Constants are declared with <code>const</code>. They can only be defined
+at the module level (outside of functions).</p>
+<p>Constant values can never be changed.</p>
+<p>V constants are more flexible than in most languages. You can assign more complex values:</p>
+{% set code = "struct Color {\n        r int\n        g int\n        b int\n}\n\npub fn (c Color) str() string { return '{$c.r, $c.g, $c.b}' }\n\nfn rgb(r, g, b int) Color { return Color{r: r, g: g, b: b} }\n\nconst (\n    numbers = [1, 2, 3]\n\n    red  = Color{r: 255, g: 0, b: 0}\n    blue = rgb(0, 0, 255)\n)\n\nprintln(numbers)\nprintln(red)\nprintln(blue)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Global variables are not allowed, so this can be really useful.</p>
+<p>When naming constants, snake_case must be used.
+Many people prefer all caps consts: <code>TOP_CITIES</code>. This wouldn't work
+well in V, because consts are a lot more powerful than in other languages.
+They can represent complex structures, and this is used quite often since there
+are no globals:</p>
+{% set code = "println('Top cities: $TOP_CITIES.filter(.usa)')\nvs\nprintln('Top cities: $top_cities.filter(.usa)')" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="println"><a class="markdownIt-Anchor" href="#println">#</a> println</h2>
+<p><code>println</code> is a simple yet powerful builtin function. It can print anything:
+strings, numbers, arrays, maps, structs.</p>
+{% set code = "println(1) // \"1\"\nprintln('hi') // \"hi\"\nprintln([1,2,3]) // \"[1, 2, 3]\"\nprintln(User{name:'Bob', age:20}) // \"User{name:'Bob', age:20}\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>If you want to define a custom print value for your type, simply define a
+<code>.str() string</code> method.</p>
+<p>If you don't want to print a newline, use <code>print()</code> instead.</p>
+<h2 id="modules"><a class="markdownIt-Anchor" href="#modules">#</a> Modules</h2>
+<p>V is a very modular language. Creating reusable modules is encouraged and is
+very simple.
+To create a new module, create a directory with your module's name and
+.v files with code:</p>
+{% set code = "cd ~/code/modules\nmkdir mymodule\nvim mymodule/mymodule.v\n\n// mymodule.v\nmodule mymodule\n\n// To export a function we have to use `pub`\npub fn say_hi() {\n    println('hello from mymodule!')\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>You can have as many .v files in <code>mymodule/</code> as you want.</p>
+<p>That's it, you can now use it in your code:</p>
+{% set code = "module main\n\nimport mymodule\n\nfn main() {\n    mymodule.say_hi()\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Note that you have to specify the module every time you call an external function.
+This may seem verbose at first, but it makes code much more readable
+and easier to understand, since it's always clear which function from
+which module is being called. Especially in large code bases.</p>
+<p>Module names should be short, under 10 characters. Circular imports are not allowed.</p>
+<p>You can create modules anywhere.</p>
+<p>All modules are compiled statically into a single executable.</p>
+<p>If you want to write a module that will automatically call some
+setup/initialization code when imported (perhaps you want to call
+some C library functions), write a module <code>init</code> function inside the module:</p>
+{% set code = "fn init() int {\n    // your setup code here ...\n    return 1\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>The init function cannot be public. It will be called automatically.</p>
+<h2 id="interfaces"><a class="markdownIt-Anchor" href="#interfaces">#</a> Interfaces</h2>
+{% set code = "struct Dog {}\nstruct Cat {}\n\nfn (d Dog) speak() string {\n    return 'woof'\n}\n\nfn (c Cat) speak() string {\n    return 'meow'\n}\n\ninterface Speaker {\n    speak() string\n}\n\nfn perform(s Speaker) string {\n    return s.speak()\n}\n\ndog := Dog{}\ncat := Cat{}\nprintln(perform(dog)) // \"woof\"\nprintln(perform(cat)) // \"meow\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>A type implements an interface by implementing its methods.
+There is no explicit declaration of intent, no &quot;implements&quot; keyword.</p>
+<h2 id="enums"><a class="markdownIt-Anchor" href="#enums">#</a> Enums</h2>
+{% set code = "enum Color {\n    red green blue\n}\n\nmut color := Color.red\n// V knows that `color` is a `Color`. No need to use `color = Color.green` here.\ncolor = .green\nprintln(color) // \"1\"  TODO: print \"green\"?" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="optionresult-types-error-handling"><a class="markdownIt-Anchor" href="#optionresult-types-error-handling">#</a> Option/Result types &amp; error handling</h2>
+{% set code = "struct User {\n    id int\n    name string\n}\n\nstruct Repo {\n    users []User\n}\n\nfn new_repo() Repo {\n    return Repo {\n        users: [User{1, 'Andrew'}, User {2, 'Bob'}, User {10, 'Charles'}]\n    }\n}\n\nfn (r Repo) find_user_by_id(id int) ?User {\n    for user in r.users {\n        if user.id == id {\n            // V automatically wraps this into an option type\n            return user\n        }\n    }\n    return error('User $id not found')\n}\n\nfn main() {\n    repo := new_repo()\n    user := repo.find_user_by_id(10) or { // Option types must be handled by `or` blocks\n        return  // `or` block must end with `return`, `break`, or `continue`\n    }\n    println(user.id) // \"10\"\n    println(user.name) // \"Charles\"\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>V combines <code>Option</code> and <code>Result</code> into one type, so you don't need to decide which one to use.</p>
+<p>The amount of work required to &quot;upgrade&quot; a function to an optional function is minimal:
+you have to add a <code>?</code> to the return type and return an error when something goes wrong.</p>
+<p>If you don't need to return an error, you can simply <code>return none</code>.</p>
+<p>This is the primary way of handling errors in V. They are still values, like in Go,
+but the advantage is that errors can't be unhandled, and handling them is a lot less verbose.</p>
+<p><code>err</code> is defined inside an <code>or</code> block and is set to the string message passed
+to the <code>error()</code> function. <code>err</code> is empty if <code>none</code> was returned.</p>
+{% set code = "user := repo.find_user_by_id(7) or {\n    println(err) // \"User 7 not found\"\n    return\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>You can also propagate errors:</p>
+{% set code = "resp := http.get(url)?\nprintln(resp.body)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p><code>http.get</code> returns <code>?http.Response</code>. It was called with <code>?</code>, so the error is propagated to the calling function
+(which must return an optional) or in case of <code>main</code> leads to a panic.
+Basically the code above is a shorter version of</p>
+{% set code = "resp := http.get(url) or {\n    panic(err)\n}\nprintln(resp.body)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>V does not have a way to force unwrap an optional (like Rust's <code>unwrap()</code>
+or Swift's <code>!</code>). You have to use <code>or { panic(err) }</code> instead.</p>
+<h2 id="generics"><a class="markdownIt-Anchor" href="#generics">#</a> Generics</h2>
+{% set code = "struct Repo<T> {\n    db DB\n}\n\nfn new_repo<T>(db DB) Repo<T> {\n    return Repo<T>{db: db}\n}\n\n// This is a generic function. V will generate it for every type it's used with.\nfn (r Repo<T>) find_by_id(id int) ?T {\n    table_name := T.name // in this example getting the name of the type gives us the table name\n    return r.db.query_one<T>('select * from $table_name where id = ?', id)\n}\n\ndb := new_db()\nusers_repo := new_repo<User>(db)\nposts_repo := new_repo<Post>(db)\nuser := users_repo.find_by_id(1)?\npost := posts_repo.find_by_id(1)?" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="concurrency"><a class="markdownIt-Anchor" href="#concurrency">#</a> Concurrency</h2>
+<p>The concurrency model is very similar to Go. To run <code>foo()</code> concurrently, just
+call it with <code>go foo()</code>. Right now, it launches the function in a new system
+thread. Soon coroutines and the scheduler will be implemented.</p>
+<h2 id="decoding-json"><a class="markdownIt-Anchor" href="#decoding-json">#</a> Decoding JSON</h2>
+{% set code = "import json\n\nstruct User {\n    name string\n    age  int\n\n    // Use the `skip` attribute to skip certain fields\n    foo Foo [skip]\n\n    // If the field name is different in JSON, it can be specified\n    last_name string [json:lastName]\n}\n\ndata := '{ \"name\": \"Frodo\", \"lastName\": \"Baggins\", \"age\": 25 }'\nuser := json.decode(User, data) or {\n    eprintln('Failed to decode json')\n    return\n}\nprintln(user.name)\nprintln(user.last_name)\nprintln(user.age)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>JSON is very popular nowadays, that's why JSON support is built in.</p>
+<p>The first argument of the <code>json.decode</code> function is the type to decode to.
+The second argument is the JSON string.</p>
+<p>V generates code for JSON encoding and decoding. No runtime reflection is used. This results in much better
+performance.</p>
+<h2 id="testing"><a class="markdownIt-Anchor" href="#testing">#</a> Testing</h2>
+{% set code = "// hello.v\nfn hello() string {\n    return 'Hello world'\n}\n\n// hello_test.v\nfn test_hello() {\n    assert hello() == 'Hello world'\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p><code>assert</code> keyword can be used outside of tests as well.</p>
+<p>All test functions have to be placed in <code>*_test.v</code> files and begin with <code>test_</code>.</p>
+<p>To run the tests do <code>v hello_test.v</code>.</p>
+<p>To test an entire module, do <code>v test mymodule</code>.</p>
+<p>You can also do <code>v test .</code> to test everything inside your curent folder (and underneath it).</p>
+<p>You can pass <code>-stats</code> to v test, to see more details about the individual tests in each _test.v file.</p>
+<h2 id="memory-management"><a class="markdownIt-Anchor" href="#memory-management">#</a> Memory management</h2>
+<p>(Work in progress)
+There's no garbage collection or reference counting. V cleans everything up
+during compilation. If your V program compiles, it's guaranteed that it's going
+to be leak free. For example:</p>
+{% set code = "fn draw_text(s string, x, y int) {\n    ...\n}\n\nfn draw_scene() {\n    ...\n    draw_text('hello $name1', 10, 10)\n    draw_text('hello $name2', 100, 10)\n    draw_text(strings.repeat('X', 10000), 10, 50)\n    ...\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>The strings don't escape <code>draw_text</code>, so they are cleaned up when
+the function exits.</p>
+<p>In fact, the first two calls won't result in any allocations at all.
+These two strings are small,
+V will use a preallocated buffer for them.</p>
+{% set code = "fn test() []int {\n    number := 7 // stack variable\n    user := User{} // struct allocated on stack\n    numbers := [1, 2, 3] // array allocated on heap, will be freed as the function exits\n    println(number)\n    println(user)\n    println(numbers)\n    numbers2 := [4, 5, 6] // array that's being returned, won't be freed here\n    return numbers2\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="defer"><a class="markdownIt-Anchor" href="#defer">#</a> Defer</h2>
+<p>A defer statement defers the execution of a block of statements until the surrounding function returns.</p>
+{% set code = "fn read_log() {\n    f := os.open('log.txt')\n    defer { f.close() }\n    ...\n    if !ok {\n        // defer statement will be called here, the file will be closed\n        return\n    }\n    ...\n    // defer statement will be called here, the file will be closed\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="orm"><a class="markdownIt-Anchor" href="#orm">#</a> ORM</h2>
+<p>(alpha)</p>
+<p>V has a built-in ORM that supports Postgres, and will soon support MySQL and SQLite.</p>
+<p>The benefits of V ORM:</p>
+<ul>
+<li>One syntax for all SQL dialects. Migrating to a different database becomes much easier.</li>
+<li>Queries are constructed with V syntax. There's no need to learn another syntax.</li>
+<li>Safety. It's impossible to construct a SQL query with an injection.</li>
+<li>Compile time checks. No more typos that can only be caught at runtime.</li>
+<li>Readability and simplicity. You don't need to manually parse the results and construct objects.</li>
+</ul>
+{% set code = "struct Customer { // struct name has to be the same as the table name for now\n    id int // an integer id must be the first field\n    name string\n    nr_orders int\n    country string\n}\n\ndb := pg.connect(db_name, db_user)\n\n// select count(*) from Customer\nnr_customers := db.select count from Customer\nprintln('number of all customers: $nr_customers')\n\n// V syntax can be used to build queries\n// db.select returns an array\nuk_customers := db.select from Customer where country == 'uk' && nr_orders > 0\nprintln(uk_customers.len)\nfor customer in uk_customers {\n    println('$customer.id - $customer.name')\n}\n\n// by adding `limit 1` we tell V that there will be only one object\ncustomer := db.select from Customer where id == 1 limit 1\nprintln('$customer.id - $customer.name')\n\n// insert a new customer\nnew_customer := Customer{name: 'Bob', nr_orders: 10}\ndb.insert(new_customer)" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="vfmt"><a class="markdownIt-Anchor" href="#vfmt">#</a> vfmt</h2>
+<p>You don't need to worry about formatting your code or style guidelines.
+vfmt takes care of that:</p>
+{% set code = "v fmt file.v" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>It's recommended to set up your editor, so that vfmt runs on every save.</p>
+<p>Always run vfmt before pushing your code.</p>
+<h2 id="writing_documentation"><a class="markdownIt-Anchor" href="#writing_documentation">#</a> writing_documentation</h2>
+<p>The way it works is very similar to Go. It's very simple: there's no need to
+write documentation for your code, vdoc will generate it from the source code.</p>
+<p>Documentation for each function/type/const must be placed right before the declaration:</p>
+{% set code = "// clearall clears all bits in the array\nfn clearall() {\n\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>The comment must start with the name of the definition.</p>
+<p>An overview of the module must be placed in the first comment right after the module's name.</p>
+<p>To generate documentation, run <code>v doc path/to/module</code> (TODO this is
+temporarily disabled).</p>
+<h1 id="advanced-topics"><a class="markdownIt-Anchor" href="#advanced-topics">#</a> Advanced Topics</h1>
+<h2 id="calling-c-functions-from-v"><a class="markdownIt-Anchor" href="#calling-c-functions-from-v">#</a> Calling C functions from V</h2>
+{% set code = "#flag -lsqlite3\n#include \"sqlite3.h\"\n\nstruct C.sqlite3\nstruct C.sqlite3_stmt\n\nfn C.sqlite3_open(charptr, C.sqlite3)\nfn C.sqlite3_column_int(stmt C.sqlite3_stmt, n int) int\n// Or just define the type of parameter & leave C. prefix\nfn C.sqlite3_prepare_v2(sqlite3, charptr, int, sqlite3_stmt, charptr) int\nfn C.sqlite3_step(sqlite3)\nfn C.sqlite3_finalize(sqlite3_stmt)\n\nfn main() {\n    path := 'users.db'\n    db := &C.sqlite3(0) // a temporary hack meaning `sqlite3* db = 0`\n    C.sqlite3_open(path.str, &db)\n    query := 'select count(*) from users'\n    stmt := &C.sqlite3_stmt(0)\n    C.sqlite3_prepare_v2(db, query.str, - 1, &stmt, 0)\n    C.sqlite3_step(stmt)\n    nr_users := C.sqlite3_column_int(stmt, 0)\n    C.sqlite3_finalize(stmt)\n    println(nr_users)\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Add <code>#flag</code> directives to the top of your V files to provide C compilation flags like:</p>
+<ul>
+<li><code>-I</code> for adding C include files search paths</li>
+<li><code>-l</code> for adding C library names that you want to get linked</li>
+<li><code>-L</code> for adding C library files search paths</li>
+<li><code>-D</code> for setting compile time variables</li>
+</ul>
+<p>You can use different flags for different targets. Right now, <code>linux</code>, <code>darwin</code> , <code>freebsd</code>, and <code>windows</code> are supported.</p>
+<p>NB: For now you have to use one flag per line:</p>
+{% set code = "#flag linux -lsdl2\n#flag linux -Ivig\n#flag linux -DCIMGUI_DEFINE_ENUMS_AND_STRUCTS=1\n#flag linux -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS=1\n#flag linux -DIMGUI_IMPL_API=" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>You can also add C code, in your V module. For example, lets say that your C code is located in a folder named 'c' inside your module folder. Then:</p>
+{% set code = "#flag -I @VMODULE/c\n#flag @VMODULE/c/implementation.o\n#include \"header.h\"" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>... will make V look for an compiled .o file in your module folder/c/implementation.o .
+If V finds it, the .o file will get linked to the main executable, that used the module.
+If it does not find it, V assumes that there is a <code>@VMODULE/c/implementation.c</code> file,
+and tries to compile it to a .o file, then will use that.
+This allows you to have C code, that is contained in a V module, so that its distribution is easier.
+You can see a complete example for using C code in a V wrapper module here:
+<a href="https://github.com/vlang/v/tree/master/vlib/compiler/tests/project_with_c_code">minimal V project, that has a module, which contains C code</a></p>
+<p>You can use <code>-cflags</code> to pass custom flags to the backend C compiler. You can also use <code>-cc</code> to change the default C backend compiler.
+For example: <code>-cc gcc-9 -cflags -fsanitize=thread</code>.</p>
+<p>Ordinary zero terminated C strings can be converted to V strings with <code>string(cstring)</code> or <code>string(cstring, len)</code>.</p>
+<p>NB: <code>string/1</code> and <code>string/2</code> do NOT create a copy of the <code>cstring</code>, so you should NOT free it after calling <code>string()</code>. If you need to make a copy of the C string (some libc APIs like <code>getenv/1</code> pretty much require that, since they
+return pointers to internal libc memory), you can use: <code>cstring_to_vstring(cstring)</code></p>
+<p>On Windows, C APIs often return so called <code>wide</code> strings (utf16 encoding).
+These can be converted to V strings with <code>string_from_wide(&amp;u16(cwidestring))</code> .</p>
+<p>V has these types for easier interoperability with C:</p>
+<ul>
+<li><code>voidptr</code> for C's <code>void*</code>,</li>
+<li><code>byteptr</code> for C's <code>byte*</code> and</li>
+<li><code>charptr</code> for C's <code>char*</code>.</li>
+<li><code>&amp;charptr</code> for C's <code>char**</code></li>
+</ul>
+<p>To cast <code>voidptr</code> to V references, use <code>user := &amp;User(user_void_ptr)</code>.</p>
+<p><code>voidptr</code> can also be dereferenced to V structs by casting: <code>user := User(user_void_ptr)</code>.</p>
+<p>Check out <a href="https://github.com/vlang/v/blob/master/vlib/net/socket.v">socket.v for an example of calling C code from V</a> .</p>
+<p>To debug issues with the generated C code, you can pass these flags:</p>
+<ul>
+<li><code>-cg</code> - produces a less optimized executable with more debug information in it.</li>
+<li><code>-keep_c</code> - keep the generated C file, so your debugger can also use it.</li>
+<li><code>-pretty_c</code> - run clang-format over the generated C file, so it looks nicer and is easier to read.</li>
+<li><code>-show_c_cmd</code> - prints the C command that is used to build the program.</li>
+</ul>
+<p>For best debugging experience, you can pass all of them at the same time: <code>v -cg -keep_c -pretty_c -show_c_cmd yourprogram.v</code> , then just run your debugger (gdb/lldb) or IDE with the produced executable <code>yourprogram</code>.</p>
+<p>If you just want to inspect the generated C code, without compiling it further, you can also use: <code>-o file.c</code>. This will make V produce the <code>file.c</code> then stop.</p>
+<h2 id="compile-time-if"><a class="markdownIt-Anchor" href="#compile-time-if">#</a> Compile time if</h2>
+{% set code = "$if windows {\n    println('Windows')\n}\n$if linux {\n    println('Linux')\n}\n$if macos {\n    println('macOS')\n}\n\n$if debug {\n    println('debugging')\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Compile time <code>if</code> starts with a <code>$</code>. Right now it can only be used to detect
+an OS or a <code>-debug</code> compilation option.</p>
+<h2 id="reflection-via-codegen"><a class="markdownIt-Anchor" href="#reflection-via-codegen">#</a> Reflection via codegen</h2>
+<p>Having built-in JSON support is nice, but V also allows you to create efficient
+serializers for anything:</p>
+{% set code = "// TODO: not implemented yet\nfn decode<T>(data string) T {\n    mut result := T{}\n    for field in T.fields {\n        if field.typ == 'string' {\n            result.$field = get_string(data, field.name)\n        } else if field.typ == 'int' {\n            result.$field = get_int(data, field.name)\n        }\n    }\n    return result\n}\n\n// generates to:\nfn decode_User(data string) User {\n    mut result := User{}\n    result.name = get_string(data, 'name')\n    result.age = get_int(data, 'age')\n    return result\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="limited-operator-overloading"><a class="markdownIt-Anchor" href="#limited-operator-overloading">#</a> Limited operator overloading</h2>
+{% set code = "struct Vec {\n    x int\n    y int\n}\n\nfn (a Vec) str() string {\n    return '{$a.x, $a.y}'\n}\n\nfn (a Vec) + (b Vec) Vec {\n    return Vec {\n        a.x + b.x,\n        a.y + b.y\n    }\n}\n\nfn (a Vec) - (b Vec) Vec {\n    return Vec {\n        a.x - b.x,\n        a.y - b.y\n    }\n}\n\nfn main() {\n    a := Vec{2, 3}\n    b := Vec{4, 5}\n    println(a + b) // \"{6, 8}\"\n    println(a - b) // \"{-2, -2}\"\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Operator overloading goes against V's philosophy of simplicity and predictability. But since
+scientific and graphical applications are among V's domains, operator overloading is very important to have
+in order to improve readability:</p>
+<p><code>a.add(b).add(c.mul(d))</code> is a lot less readable than <code>a + b + c * d</code>.</p>
+<p>To improve safety and maintainability, operator overloading has several limitations:</p>
+<ul>
+<li>It's only possible to overload <code>+, -, *, /</code> operators.</li>
+<li>Calling other functions inside operator functions is not allowed.</li>
+<li>Operator functions can't modify their arguments.</li>
+<li>Both arguments must have the same type (just like with all operators in V).</li>
+</ul>
+<h2 id="inline-assembly"><a class="markdownIt-Anchor" href="#inline-assembly">#</a> Inline assembly</h2>
+<p>TODO: not implemented yet</p>
+{% set code = "fn main() {\n    a := 10\n    asm x64 {\n        mov eax, [a]\n        add eax, 10\n        mov [a], eax\n    }\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="translating-cc-to-v"><a class="markdownIt-Anchor" href="#translating-cc-to-v">#</a> Translating C/C++ to V</h2>
+<p>TODO: translating C to V will be available in V 0.3. C++ to V will be available later this year.</p>
+<p>V can translate your C/C++ code to human readable V code.
+Let's create a simple program <code>test.cpp</code> first:</p>
+{% set code = "#include <vector>\n#include <string>\n#include <iostream>\n\nint main() {\n        std::vector<std::string> s;\n        s.push_back(\"V is \");\n        s.push_back(\"awesome\");\n        std::cout << s.size() << std::endl;\n        return 0;\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Run <code>v translate test.cpp</code> and V will generate <code>test.v</code>:</p>
+{% set code = "fn main {\n        mut s := []\n    s << 'V is '\n    s << 'awesome'\n    println(s.len)\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>An online C/C++ to V translator is coming soon.</p>
+<p>When should you translate C code and when should you simply call C code from V?</p>
+<p>If you have well-written, well-tested C code, then of course you can always simply call this C code from V.</p>
+<p>Translating it to V gives you several advantages:</p>
+<ul>
+<li>If you plan to develop that code base, you now have everything in one language, which is much safer and easier to develop in than C.</li>
+<li>Cross-compilation becomes a lot easier. You don't have to worry about it at all.</li>
+<li>No more build flags and include files either.</li>
+</ul>
+<h2 id="hot-code-reloading"><a class="markdownIt-Anchor" href="#hot-code-reloading">#</a> Hot code reloading</h2>
+{% set code = "module main\n\nimport time\nimport os\n\n[live]\nfn print_message() {\n    println('Hello! Modify this message while the program is running.')\n}\n\nfn main() {\n    for {\n        print_message()\n        time.sleep_ms(500)\n    }\n}\n" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Build this example with <code>v -live message.v</code>.</p>
+<p>Functions that you want to be reloaded must have <code>[live]</code> attribute
+before their definition.</p>
+<p>Right now it's not possible to modify types while the program is running.</p>
+<p>More examples, including a graphical application:
+<a href="https://github.com/vlang/v/tree/master/examples/hot_code_reloading">github.com/vlang/v/tree/master/examples/hot_code_reloading</a>.</p>
+<h2 id="cross-compilation"><a class="markdownIt-Anchor" href="#cross-compilation">#</a> Cross compilation</h2>
+<p>To cross compile your project simply run</p>
+{% set code = "v -os windows ." %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>or</p>
+{% set code = "v -os linux ." %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>(Cross compiling for macOS is temporarily not possible.)</p>
+<p>If you don't have any C dependencies, that's all you need to do. This works even
+when compiling GUI apps using the <code>ui</code> module or graphical apps using <code>gg</code>.</p>
+<p>You will need to install Clang, LLD linker, and download a zip file with
+libraries and include files for Windows and Linux. V will provide you with a link.</p>
+<h2 id="cross-platform-shell-scripts-in-v"><a class="markdownIt-Anchor" href="#cross-platform-shell-scripts-in-v">#</a> Cross-platform shell scripts in V</h2>
+<p>V can be used as an alternative to Bash to write deployment scripts, build scripts, etc.</p>
+<p>The advantage of using V for this is the simplicity and predictability of the language, and
+cross-platform support. &quot;V scripts&quot; run on Unix-like systems as well as on Windows.</p>
+<p>Use .vsh file extension. It will make all functions in the <code>os</code>
+module global (so that you can use <code>ls()</code> instead of <code>os.ls()</code>, for example).</p>
+{% set code = "rm('build/*')\n// Same as:\nfor file in ls('build/') {\n    rm(file)\n}\n\nmv('*.v', 'build/')\n// Same as:\nfor file in ls('.') {\n    if file.ends_with('.v') {\n        mv(file, 'build/')\n    }\n}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<p>Now you can either compile this like a normal V program and get an executable you can deploy and run
+anywhere:
+<code>v deploy.v &amp;&amp; ./deploy</code></p>
+<p>Or just run it more like a traditional bash script:
+<code>v run deploy.v</code></p>
+<h2 id="appendix-i-keywords"><a class="markdownIt-Anchor" href="#appendix-i-keywords">#</a> Appendix I: Keywords</h2>
+<p>V has 23 keywords:</p>
+{% set code = "break\nconst\ncontinue\ndefer\nelse\nenum\nfn\nfor\ngo\ngoto\nif\nimport\nin\ninterface\nmatch\nmodule\nmut\nnone\nor\npub\nreturn\nstruct\ntype" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}
+<h2 id="appendix-ii-operators"><a class="markdownIt-Anchor" href="#appendix-ii-operators">#</a> Appendix II: Operators</h2>
+{% set code = "+    sum                    integers, floats, strings\n-    difference             integers, floats\n*    product                integers, floats\n/    quotient               integers, floats\n%    remainder              integers\n\n&    bitwise AND            integers\n|    bitwise OR             integers\n^    bitwise XOR            integers\n\n<<   left shift             integer << unsigned integer\n>>   right shift            integer >> unsigned integer\n\n\nPrecedence    Operator\n    5             *  /  %  <<  >>  &\n    4             +  -  |  ^\n    3             ==  !=  <  <=  >  >=\n    2             &&\n    1             ||\n\n\nAssignment Operators\n+=   -=   *=   /=   %=\n&=   |=   ^=\n>>=  <<=" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}

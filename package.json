@@ -4,7 +4,11 @@
   "description": "",
   "main": "build-pages.js",
   "dependencies": {
+    "markdown-it": "^10.0.0",
+    "markdown-it-toc-and-anchor": "^4.2.0",
+    "markdown-toc": "^1.2.0",
     "ncp": "^2.0.0",
+    "node-fetch": "^2.6.0",
     "node-sass": "^4.13.1",
     "nunjucks": "^3.2.0"
   },

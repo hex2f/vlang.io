@@ -2,6 +2,8 @@ const nunjucks = require("nunjucks")
 const sass = require('node-sass')
 const NCP = require('ncp')
 const CleanCSS = require('clean-css')
+const fetch = require('node-fetch')
+const mdtoc = require('markdown-toc')
 const { promisify } = require('util')
 const path = require("path")
 const fs = require("fs")
@@ -11,12 +13,42 @@ const ncp = promisify(NCP.ncp)
 
 const pages = [
   'index',
-  'play'
+  'play',
+  'docs'
 ]
 
 async function compile() {
-  console.log('Building pages')
+  console.log('Building docs')
   
+  console.log('Setting up MD parser')
+  var md = require('markdown-it')({})
+    .use(require('markdown-it-toc-and-anchor').default, {})
+  md.renderer.rules.fence = function (tokens, idx) {
+    let code = tokens[idx].content
+      .replace(/\n/g, '\\n')
+      .replace(/"/g, '\\"')
+    if (code.endsWith('\\n')) code = code.slice(0, -2)
+    return `{% set code = "${code}" %}
+{% set noheader = true  %}
+{% include '../components/codeblock.njk' %}
+{% set noheader = false %}\n`
+  }
+
+  console.log('Fetching MD from github')
+  let docsMD = await fetch('https://raw.githubusercontent.com/memeone/v/memeone-patch-docs/doc/docs.md')
+
+  console.log('Building NJK from MD')
+  docsMD = await docsMD.text()
+  let docs = md.render(docsMD)
+  await writeFile('./pages/docs/content.njk', docs)
+
+  console.log('Generating TOC')
+  let toc = mdtoc(docsMD).content
+  console.log('Building NJK from MD TOC')
+  toc = md.render(toc)
+  await writeFile('./pages/docs/toc.njk', toc)
+
+  console.log('Building pages')
   await Promise.all(
     pages.map(page =>
       writeFile(
@@ -27,16 +59,12 @@ async function compile() {
     )
   )
   
-  console.log('Finished building pages')
   console.log('Building sass')
-
   let app_sass = await renderSass({ file: './app.sass' })
   let clean_css = new CleanCSS({}).minify(app_sass.css.toString())
   await writeFile("./build/app.css", clean_css.styles, 'utf8')
 
-  console.log('Finished building sass')
   console.log('Copying res')
-
   ncp('./res', './build')
 }
 
