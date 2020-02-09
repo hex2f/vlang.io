@@ -7,6 +7,7 @@ const mdtoc = require('markdown-toc')
 const { promisify } = require('util')
 const path = require("path")
 const fs = require("fs")
+const mkdir = promisify(fs.mkdir)
 const writeFile = promisify(fs.writeFile)
 const renderSass = promisify(sass.render)
 const ncp = promisify(NCP.ncp)
@@ -19,7 +20,7 @@ const pages = [
 
 async function compile() {
   console.log('Building docs')
-  
+
   console.log('Setting up MD parser')
   var md = require('markdown-it')({})
     .use(require('markdown-it-toc-and-anchor').default, {})
@@ -49,16 +50,18 @@ async function compile() {
   await writeFile('./pages/docs/toc.njk', toc)
 
   console.log('Building pages')
+  let buildDir = "./build"
+  await mkdir(buildDir, { recursive: true })
   await Promise.all(
     pages.map(page =>
       writeFile(
-        path.join("./build", page + ".html"),
+        path.join(buildDir, page + ".html"),
         nunjucks.render(path.join("./pages", page + ".njk")),
         err => err && console.error(err)
       )
     )
   )
-  
+
   console.log('Building sass')
   let app_sass = await renderSass({ file: './app.sass' })
   let clean_css = new CleanCSS({}).minify(app_sass.css.toString())
