@@ -23,7 +23,7 @@ async function compile() {
 
   console.log('Setting up MD parser')
   var md = require('markdown-it')({})
-    .use(require('markdown-it-toc-and-anchor').default, {})
+    .use(require('markdown-it-toc-and-anchor').default, { slugify: require('uslug') })
   md.renderer.rules.fence = function (tokens, idx) {
     let code = tokens[idx].content
       .replace(/\n/g, '\\n')
@@ -44,7 +44,7 @@ async function compile() {
   await writeFile('./pages/docs/content.njk', docs)
 
   console.log('Generating TOC')
-  let toc = mdtoc(docsMD).content
+  let toc = mdtoc(docsMD, {slugify: require('uslug') }).content
   console.log('Building NJK from MD TOC')
   toc = md.render(toc)
   await writeFile('./pages/docs/toc.njk', toc)
