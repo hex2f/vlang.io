@@ -50,6 +50,18 @@ async function compile() {
   toc = md.render(toc)
   await writeFile('./pages/docs/toc.njk', toc)
 
+  console.log('Fetching lastest release')
+  let release = await fetch('https://api.github.com/repos/vlang/v/releases/latest')
+  release = await release.json()
+  let win = release.assets.find(r => r.name === 'v_windows.zip')
+  let lin = release.assets.find(r => r.name === 'v_linux.zip')
+  let mac = release.assets.find(r => r.name === 'v_macos.zip')
+  let versions = `{% set lin_size = "v${release.name} - ${Math.round((lin.size / 1024 / 1024)*10)/10}MB" %}
+{% set mac_size = "v${release.name} - ${Math.round((mac.size / 1024 / 1024)*10)/10}MB" %}
+{% set win_size = "v${release.name} - ${Math.round((win.size / 1024 / 1024)*10)/10}MB" %}
+{% set version = "${release.name}" %}`
+  await writeFile('./pages/home/download-versions.njk', versions)
+
   console.log('Building pages')
   let buildDir = "./build"
   await mkdir(buildDir, { recursive: true })

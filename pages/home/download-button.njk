@@ -1,8 +1,60 @@
+{% from "./download-versions.njk" import lin_size, mac_size, win_size, version %}
 <div class='button' style="background: #4a607e">
-  <img class='logo' src='apple.png' />
-  <div class='text'>
-    <span class='link'>Download for MacOS</span>
-    <span class='details'>v0.1.24 - 1.2MB</span>
+  <a id="dl-a" href="https://github.com/vlang/v/releases/download/{{version}}/v_windows.zip" style="display: flex; color: #eee">
+    <i class="fab fa-windows download-icon" id='dl-icon'></i>
+    <div class='text'>
+      <span class='link' id='dl-name'>Download for Windows</span>
+      <span class='details' id='dl-size'>v0.1.24 - 1.4MB</span>
+    </div>
+  </a>
+  <div class='options-container' tabindex="0">
+    <img class='right-icon' src='down.png' />
+    <div class='options'>
+      <a href="https://github.com/vlang/v/releases/download/{{version}}/v_linux.zip" class='dl-option'>
+        <i class="fab fa-linux"></i>
+        <span class='name'>Linux</span>
+        <span class='size'>{{lin_size}}</span>
+      </a>
+      <a href="https://github.com/vlang/v/releases/download/{{version}}/v_macos.zip" class='dl-option'>
+        <i class="fab fa-apple"></i>
+        <span class='name'>macOS</span>
+        <span class='size'>{{mac_size}}</span>
+      </a>
+      <a href="https://github.com/vlang/v/releases/download/{{version}}/v_windows.zip" class='dl-option'>
+        <i class="fab fa-windows"></i>
+        <span class='name'>Windows</span>
+        <span class='size'>{{win_size}}</span>
+      </a>
+    </div>
   </div>
-  <img class='right-icon' src='down.png' />
 </div>
+<script>
+var dlicon = document.getElementById('dl-icon')
+var dlname = document.getElementById('dl-name')
+var dlsize = document.getElementById('dl-size')
+var dla = document.getElementById('dl-a')
+
+var ua = window.navigator.userAgent,
+    platform = window.navigator.platform,
+    macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+    windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+    iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+    os = null
+if (macosPlatforms.indexOf(platform) !== -1 || iosPlatforms.indexOf(platform) !== -1) {
+  dlname.innerText = 'Download for macOS'
+  dlsize.innerText = '{{mac_size}}'
+  dlicon.className = 'fab fa-apple download-icon'
+  dla.href = "https://github.com/vlang/v/releases/download/{{version}}/v_macos.zip"
+} else if (windowsPlatforms.indexOf(platform) !== -1 || /Android/.test(ua)) {
+  dlname.innerText = 'Download for Windows'
+  dlsize.innerText = '{{win_size}}'
+  dlicon.className = 'fab fa-windows download-icon'
+  dla.href = "https://github.com/vlang/v/releases/download/{{version}}/v_windows.zip"
+} else if (!os && /Linux/.test(platform)) {
+  dlname.innerText = 'Download for Linux'
+  dlsize.innerText = '{{lin_size}}'
+  dlicon.className = 'fab fa-linux download-icon'
+  dla.href = "https://github.com/vlang/v/releases/download/{{version}}/v_linux.zip"
+}
+
+</script>
