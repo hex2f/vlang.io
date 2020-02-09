@@ -15,7 +15,8 @@ const ncp = promisify(NCP.ncp)
 const pages = [
   'index',
   'play',
-  'docs'
+  'docs',
+  'modules'
 ]
 
 async function compile() {
