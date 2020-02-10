@@ -1,3 +1,4 @@
+$code-font: "Roboto Mono", "Courier New", Menlo, "DejaVu Sans Mono", Monaco, Courier, monospace
 .codeblock
   background: #333344
   padding: 12px 12px 4px 12px
@@ -6,8 +7,8 @@
   margin: 0px
   color: #c9c5c4
   font-size: 15px
-  font-family: "Roboto Mono", "Courier New", Menlo, "DejaVu Sans Mono", Monaco, Courier, monospace
   position: relative
+  font-family: $code-font
 
   .play-btn-fixed
     position: absolute
@@ -18,17 +19,18 @@
     overflow-x: auto
     overflow-y: hidden
     line-height: 1.2
+    font-family: $code-font
     white-space: pre-wrap
 
   textarea
     font-size: 15px
-    font-family: "Roboto Mono", "Courier New", Menlo, "DejaVu Sans Mono", Monaco, Courier, monospace
     line-height: 1.2
+    font-family: $code-font
     position: absolute
     top: 48px
     left: 10px
     height: calc(100% - 48px)
-    width: calc(100% - 24px)
+    width: calc(100% - 22px)
     caret-color: #fff
     color: transparent
     background: transparent
