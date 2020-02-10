@@ -17,7 +17,9 @@ const pages = [
   'play',
   'docs',
   'modules',
-  'editors'
+  'editors',
+  'faq',
+  'compare'
 ]
 
 async function compile() {

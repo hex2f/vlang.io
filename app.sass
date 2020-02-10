@@ -28,6 +28,21 @@ a
 input:focus, button:focus, textarea:focus
   outline: none
 
+.faq
+  max-width: 900px
+  margin-left: auto
+  margin-right: auto
+  margin-bottom: 64px
+  #faq
+    text-align: center
+    font-weight: 500
+  .question
+    margin-bottom: 46px
+  table
+    border-collapse: collapse
+  td
+    border: 1px solid #dfdfdf
+    padding: 8px 12px
 @media (max-width: $small-screen-width)
   #app
     grid-template-rows: auto 1fr
@@ -40,3 +55,4 @@ input:focus, button:focus, textarea:focus
 @import "./styles/landing.sass"
 @import "./styles/playground.sass"
 @import "./styles/editors.sass"
+@import "./styles/built-in-v.sass"
