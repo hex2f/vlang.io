@@ -11,12 +11,12 @@
 
 <div class='codeblock' id="{{cbid}}">
   {% if noheader %}
-  <a href="/play" class='play-btn play-btn-fixed' id='{{rbid}}'><i class='fas fa-play'></i> Run</a>
+  <a href="/play" class='play-btn play-btn-fixed' id='{{rbid}}'>{% include "../icons/play.html" %} Run</a>
   {% else %}
   <div class='titlebar separator'>
     <span>{{filename}}</span>
     <div class='flex'></div>
-    <a href="/play" class='play-btn' id='{{rbid}}'><i class='fas fa-play'></i> Run</a>
+    <a href="/play" class='play-btn' id='{{rbid}}'>{% include "../icons/play.html" %} Run</a>
   </div>
   {% endif %}
   <pre><div id="{{hlid}}">{{code}}</div><textarea spellCheck="false" id="{{taid}}" class="{% if noheader %}no-header{% endif %}">{{code}}</textarea></pre>
