@@ -8,6 +8,7 @@ const { promisify } = require('util')
 const path = require("path")
 const fs = require("fs")
 const mkdir = promisify(fs.mkdir)
+const rmdir = promisify(fs.rmdir)
 const writeFile = promisify(fs.writeFile)
 const renderSass = promisify(sass.render)
 const ncp = promisify(NCP.ncp)
@@ -67,6 +68,7 @@ async function compile() {
 
   console.log('Building pages')
   let buildDir = "./build"
+  await rmdir(buildDir, { recursive: true })
   await mkdir(buildDir, { recursive: true })
   await Promise.all(
     pages.map(page =>
