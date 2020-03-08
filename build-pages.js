@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const nunjucks = require("nunjucks")
 const sass = require('node-sass')
 const NCP = require('ncp')
