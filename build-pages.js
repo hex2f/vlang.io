@@ -31,7 +31,7 @@ async function compile() {
   const md = require('markdown-it')({})
     .use(require('markdown-it-toc-and-anchor').default, { slugify: require('uslug') })
   md.renderer.rules.fence = function (tokens, idx) {
-    const code = tokens[idx].content
+    let code = tokens[idx].content
       .replace(/\n/g, '\\n')
       .replace(/"/g, '\\"')
     if (code.endsWith('\\n')) code = code.slice(0, -2)
