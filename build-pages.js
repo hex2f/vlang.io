@@ -29,7 +29,7 @@ async function compile() {
 
   console.log('Setting up MD parser')
   const md = require('markdown-it')({})
-    .use(require('markdown-it-toc-and-anchor').default, { slugify: require('uslug') })
+    md.use(require('markdown-it-toc-and-anchor').default, { slugify: require('uslug') })
   md.renderer.rules.fence = function (tokens, idx) {
     let code = tokens[idx].content
       .replace(/\n/g, '\\n')
