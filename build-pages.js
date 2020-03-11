@@ -60,9 +60,9 @@ async function compile() {
   let win = release.assets.find(r => r.name === 'v_windows.zip')
   let lin = release.assets.find(r => r.name === 'v_linux.zip')
   let mac = release.assets.find(r => r.name === 'v_macos.zip')
-  let versions = `{% set lin_size = "v${release.name} - ${Math.round((lin.size / 1024 / 1024)*10)/10}MB" %}
-{% set mac_size = "v${release.name} - ${Math.round((mac.size / 1024 / 1024)*10)/10}MB" %}
-{% set win_size = "v${release.name} - ${Math.round((win.size / 1024 / 1024)*10)/10}MB" %}
+  let versions = `{% set lin_size = "${Math.round((lin.size / 1024 / 1024)*10)/10}MB" %}
+{% set mac_size = "${Math.round((mac.size / 1024 / 1024)*10)/10}MB" %}
+{% set win_size = "${Math.round((win.size / 1024 / 1024)*10)/10}MB" %}
 {% set version = "${release.name}" %}`
   await writeFile('./pages/home/download-versions.njk', versions)
 
