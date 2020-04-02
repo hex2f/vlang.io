@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 13.x]
+        node-version: [13.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -24,6 +24,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - run: npm i
     - run: npm run build
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
