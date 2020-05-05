@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const nunjucks = require("nunjucks")
 const sass = require('node-sass')
 const NCP = require('ncp')
@@ -27,8 +28,8 @@ async function compile() {
   console.log('Building docs')
 
   console.log('Setting up MD parser')
-  var md = require('markdown-it')({})
-    .use(require('markdown-it-toc-and-anchor').default, { slugify: require('uslug') })
+  const md = require('markdown-it')({})
+    md.use(require('markdown-it-toc-and-anchor').default, { slugify: require('uslug') })
   md.renderer.rules.fence = function (tokens, idx) {
     let code = tokens[idx].content
       .replace(/\n/g, '\\n')
@@ -57,17 +58,17 @@ async function compile() {
   console.log('Fetching lastest release')
   let release = await fetch('https://api.github.com/repos/vlang/v/releases/latest')
   release = await release.json()
-  let win = release.assets.find(r => r.name === 'v_windows.zip')
-  let lin = release.assets.find(r => r.name === 'v_linux.zip')
-  let mac = release.assets.find(r => r.name === 'v_macos.zip')
-  let versions = `{% set lin_size = "${Math.round((lin.size / 1024 / 1024)*10)/10}MB" %}
-{% set mac_size = "${Math.round((mac.size / 1024 / 1024)*10)/10}MB" %}
-{% set win_size = "${Math.round((win.size / 1024 / 1024)*10)/10}MB" %}
+  const win = release.assets.find(r => r.name === 'v_windows.zip')
+  const lin = release.assets.find(r => r.name === 'v_linux.zip')
+  const mac = release.assets.find(r => r.name === 'v_macos.zip')
+  const versions = `{% set lin_size = "v${release.name} - ${Math.round((lin.size / 1024 / 1024)*10)/10}MB" %}
+{% set mac_size = "v${release.name} - ${Math.round((mac.size / 1024 / 1024)*10)/10}MB" %}
+{% set win_size = "v${release.name} - ${Math.round((win.size / 1024 / 1024)*10)/10}MB" %}
 {% set version = "${release.name}" %}`
   await writeFile('./pages/home/download-versions.njk', versions)
 
   console.log('Building pages')
-  let buildDir = "./build"
+  const buildDir = "./build"
   await rmdir(buildDir, { recursive: true })
   await mkdir(buildDir, { recursive: true })
   await Promise.all(
@@ -81,8 +82,8 @@ async function compile() {
   )
 
   console.log('Building sass')
-  let app_sass = await renderSass({ file: './app.sass' })
-  let clean_css = new CleanCSS({}).minify(app_sass.css.toString())
+  const app_sass = await renderSass({ file: './app.sass' })
+  const clean_css = new CleanCSS({}).minify(app_sass.css.toString())
   await writeFile("./build/app.css", clean_css.styles, 'utf8')
 
   console.log('Copying res')
