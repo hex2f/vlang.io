@@ -3,14 +3,17 @@
   <a href='/'><img src='/v-logo.png' class='logo' /></a>
 
   <div class='nav'>
-    <a href='https://github.com/vlang/V/tree/master/examples' class='item'>Examples</a>
-    <a href='/docs' class='item {% if active_page == "docs" %}active{% endif %}'>Documentation</a>
-    <a href='/modules' class='item {% if active_page == "modules" %}active{% endif %}'>Modules</a>
+    <a href='https://github.com/vlang/V/tree/master/examples' class='item'>%examples</a>
+    <a href='/docs' class='item {% if active_page == "docs" %}active{% endif %}'>%documentation</a>
+    <a href='/modules' class='item {% if active_page == "modules" %}active{% endif %}'>%modules</a>
     <a href='https://vpm.vlang.io/' class='item'>vpm</a>
     <a href='/play' class='item {% if active_page == "play" %}active{% endif %}'>Playground</a>
-    <a href='/faq' class='item {% if active_page == "faq" %}active{% endif %}'>FAQ</a>
+    <a href='/faq' class='item {% if active_page == "faq" %}active{% endif %}'>%faq</a>
     <a href='https://github.com/vlang/v/wiki/Backers' class='item'>Backers</a>
   </div>
-  <a href='https://patreon.com/' class='patreon'><img src='/patreon.png' /></a>
+  <div class="donate-button">
+    <a href='https://patreon.com/' class='patreon'><img src='/patreon.png' /></a>
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=HRGVJ2LA2LKJ8&item_name=Support+V+development&currency_code=USD&source=url&lc=US" class="paypal">Donate via PayPal</a>
+  </div>
   <div class='flex'></div>
 </div>

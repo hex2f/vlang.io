@@ -1,7 +1,7 @@
 <div>
   <div class="section">
     <div class="block">
-      <h2>Simple language for building maintainable programs</h2>
+      <h2>%simple_language_for_maintainable_programs</h2>
       <p>
         You can learn the entire language by going through the documentation in half an hour, and in most cases there's only one way to do something.<br/><br/>
         This results in simple, readable, and maintainable code.<br/><br/>
@@ -9,7 +9,7 @@
       </p>
     </div>
     <div class="block">
-      <h2>Safety</h2>
+      <h2>%safety</h2>
       <ul>
         <li>No null</li>
         <li>No global variables</li>
@@ -28,7 +28,7 @@
 
   <div class="section">
     <div class="block">
-      <h2>Performance</h2>
+      <h2>%performance</h2>
       <ul>
         <li>As fast as C</li>
         <li>C interop without any costs</li>
@@ -38,10 +38,10 @@
       </ul>
     </div>
     <div class="block">
-      <h2>Fast compilation</h2>
+      <h2>%fast_compilation</h2>
       <p>
-        V compiles between ≈100k and 1.2 million lines of code per second per CPU core. <i>(Intel i5-7500 @ 3.40GHz, SM0256L SSD, no optimization)</i><br/><br/>
-        V compiles itself in 0.15 - 0.6 seconds.
+        %fast_comp1 <i>(Intel i5-7500 @ 3.40GHz, SM0256L SSD, no optimization)</i><br/><br/>
+        {% raw %}{{ raw (T "fast_comp2") }}{% endraw %}
       </p>
     </div>
   </div>
@@ -55,7 +55,7 @@
       For comparison:
       </p>
       <table>
-      <tbody><tr><td></td><td>Space required &nbsp;&nbsp;</td><td>Build time</td></tr>
+      <tbody><tr><td></td><td><b>Space required</b></td><td><b>Build time</b></td></tr>
       <tr><td>Go</td><td>525 MB</td><td>1m 33s</td></tr>
       <tr><td>Rust</td><td>30 GB</td><td>45m</td></tr>
       <tr><td>GCC</td><td>8 GB</td><td>50m</td></tr>
