@@ -4,7 +4,7 @@
   "description": "",
   "main": "build-pages.js",
   "dependencies": {
-    "markdown-it": "^10.0.0",
+    "markdown-it": "^12.3.2",
     "markdown-it-toc-and-anchor": "^4.2.0",
     "markdown-toc": "^1.2.0",
     "ncp": "^2.0.0",
